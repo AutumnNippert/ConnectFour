@@ -5,11 +5,11 @@ public class Main {
      * @param args command line arguments
      */
     public static void main(String[] args) {
-        Board b = new Board(200, 200);
+        Board b = new Board(7, 6);
         //Controller c1 = new Player(1);
         Controller c1 = new RandBot(1);
-        Controller c2 = new RandBot(2);
-        Game g = new Game(b, c1, c2, 15);
+        Controller c2 = new VertBot(2);
+        Game g = new Game(b, c1, c2, 4);
         g.init();
     }
 }

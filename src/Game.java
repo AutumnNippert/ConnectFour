@@ -13,8 +13,8 @@ public class Game {
     private final Controller c2;
     private final int winConditionCount;
 
-    private boolean isDebug = false;
-    private boolean showGUIInProgress = false;
+    private boolean isDebug = true;
+    private boolean showGUIInProgress = true;
 
     public enum PlayerPiece{
         NONE, PLAYER_1, PLAYER_2
@@ -150,7 +150,12 @@ public class Game {
                         winningPoints[k] = new Point(j - k, i);
                     }
                     for (Point p : winningPoints) {
-                        board.setTrueCoord(p.x, p.y, 4);
+                        try{
+                            board.setTrueCoord(p.x, p.y, 4);
+                        } catch (IndexOutOfBoundsException e) {
+                            Utility.Debug.printDebug(isDebug, "Point:" + p);
+                            Utility.Debug.printDebug(isDebug, e.getMessage());
+                        }
                     }
                     return 2;
                 }
