@@ -1,5 +1,3 @@
-import jdk.jshell.execution.Util;
-
 import java.util.ArrayList;
 
 /**
@@ -14,22 +12,8 @@ import java.util.ArrayList;
  */
 public class Player extends Controller {
 
-    private final int playerNum;
-    private int selection;
-
-    /**
-     * Constructs Player.
-     *
-     * @param playerNum player number
-     */
-    public Player(int playerNum) {
-        this.playerNum = playerNum;
-    }
-
-    @Override
-    public void playPiece(Board board) {
-        //Getting available options
-        board.play(selection, playerNum);
+    Player(int controllerNum) {
+        super(controllerNum);
     }
 
     @Override

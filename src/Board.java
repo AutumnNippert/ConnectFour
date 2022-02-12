@@ -87,26 +87,78 @@ public class Board {
     @Override
     public String toString() {
         String board = "";
-        for (int[] arr : this.board) {
-            for (int i : arr) {
-                if (i == 0) { //WHITE IS NO PLAYER
-                    Utility.ConsoleFunctions.printColorWithBackground("[ ]", Utility.Colors.BLACK, Utility.Colors.WHITE_BACKGROUND);
-                } else if (i == 1) { //RED IS PLAYER 1
-                    Utility.ConsoleFunctions.printColorWithBackground("[0]", Utility.Colors.BLACK, Utility.Colors.RED_BACKGROUND);
-                } else if(i == 2) { //YELLOW IS PLAYER 2
-                    Utility.ConsoleFunctions.printColorWithBackground("[0]", Utility.Colors.BLACK, Utility.Colors.YELLOW_BACKGROUND);
-                } else if(i == 3) { //BLUE IS PLAYER 1 WINNING
-                    Utility.ConsoleFunctions.printColorWithBackground("[0]", Utility.Colors.BLACK, Utility.Colors.BLUE_BACKGROUND);
-                } else if(i == 4) { //GREEN IS PLAYER 2 WINNING
-                    Utility.ConsoleFunctions.printColorWithBackground("[0]", Utility.Colors.BLACK, Utility.Colors.GREEN_BACKGROUND);
+        //Resizes depending on width of board
+        if (this.board[0].length > 100) {
+            for (int[] arr : this.board) {
+                for (int i : arr) {
+                    if (i == 0) { //WHITE IS NO PLAYER
+                        Utility.ConsoleFunctions.printColorWithBackground(" ", Utility.Colors.BLACK, Utility.Colors.WHITE_BACKGROUND);
+                    } else if (i == 1) { //RED IS PLAYER 1
+                        Utility.ConsoleFunctions.printColorWithBackground("#", Utility.Colors.BLACK, Utility.Colors.RED_BACKGROUND);
+                    } else if (i == 2) { //YELLOW IS PLAYER 2
+                        Utility.ConsoleFunctions.printColorWithBackground("#", Utility.Colors.BLACK, Utility.Colors.YELLOW_BACKGROUND);
+                    } else if (i == 3) { //BLUE IS PLAYER 1 WINNING
+                        Utility.ConsoleFunctions.printColorWithBackground("#", Utility.Colors.BLACK, Utility.Colors.BLUE_BACKGROUND);
+                    } else if (i == 4) { //GREEN IS PLAYER 2 WINNING
+                        Utility.ConsoleFunctions.printColorWithBackground("#", Utility.Colors.BLACK, Utility.Colors.GREEN_BACKGROUND);
+                    }
                 }
+                System.out.println();
+            }
+        }
+        else if (this.board[0].length > 50) {
+            for (int[] arr : this.board) {
+                for (int i : arr) {
+                    if (i == 0) { //WHITE IS NO PLAYER
+                        Utility.ConsoleFunctions.printColorWithBackground("[]", Utility.Colors.BLACK, Utility.Colors.WHITE_BACKGROUND);
+                    } else if (i == 1) { //RED IS PLAYER 1
+                        Utility.ConsoleFunctions.printColorWithBackground("[]", Utility.Colors.BLACK, Utility.Colors.RED_BACKGROUND);
+                    } else if (i == 2) { //YELLOW IS PLAYER 2
+                        Utility.ConsoleFunctions.printColorWithBackground("[]", Utility.Colors.BLACK, Utility.Colors.YELLOW_BACKGROUND);
+                    } else if (i == 3) { //BLUE IS PLAYER 1 WINNING
+                        Utility.ConsoleFunctions.printColorWithBackground("[]", Utility.Colors.BLACK, Utility.Colors.BLUE_BACKGROUND);
+                    } else if (i == 4) { //GREEN IS PLAYER 2 WINNING
+                        Utility.ConsoleFunctions.printColorWithBackground("[]", Utility.Colors.BLACK, Utility.Colors.GREEN_BACKGROUND);
+                    }
+                }
+                System.out.println();
+            }
+            for (int i = 0; i < this.board[0].length; i++) {
+                System.out.printf("%-2d", i + 1);
             }
             System.out.println();
         }
-        for (int i = 0; i < this.board[0].length; i++) {
-            System.out.printf("%2d ", i+1);
+        else {
+            for (int[] arr : this.board) {
+                for (int i : arr) {
+                    if (i == 0) { //WHITE IS NO PLAYER
+                        Utility.ConsoleFunctions.printColorWithBackground("[ ]", Utility.Colors.BLACK, Utility.Colors.WHITE_BACKGROUND);
+                    } else if (i == 1) { //RED IS PLAYER 1
+                        Utility.ConsoleFunctions.printColorWithBackground("[0]", Utility.Colors.BLACK, Utility.Colors.RED_BACKGROUND);
+                    } else if (i == 2) { //YELLOW IS PLAYER 2
+                        Utility.ConsoleFunctions.printColorWithBackground("[0]", Utility.Colors.BLACK, Utility.Colors.YELLOW_BACKGROUND);
+                    } else if (i == 3) { //BLUE IS PLAYER 1 WINNING
+                        Utility.ConsoleFunctions.printColorWithBackground("[0]", Utility.Colors.BLACK, Utility.Colors.BLUE_BACKGROUND);
+                    } else if (i == 4) { //GREEN IS PLAYER 2 WINNING
+                        Utility.ConsoleFunctions.printColorWithBackground("[0]", Utility.Colors.BLACK, Utility.Colors.GREEN_BACKGROUND);
+                    }
+                }
+                System.out.println();
+            }
+            for (int i = 0; i < this.board[0].length; i++) {
+                System.out.printf("%2d ", i + 1);
+            }
+            System.out.println();
         }
-        System.out.println();
         return board;
+    }
+
+    boolean isFull() {
+        for (int[] arr : this.board) {
+            for (int i : arr) {
+                if (i == 0) return false;
+            }
+        }
+        return true;
     }
 }

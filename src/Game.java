@@ -1,5 +1,3 @@
-import jdk.jshell.execution.Util;
-
 import java.awt.*;
 import java.util.Arrays;
 
@@ -15,7 +13,8 @@ public class Game {
     private final Controller c2;
     private final int winConditionCount;
 
-    private boolean isDebug = true;
+    private boolean isDebug = false;
+    private boolean showGUIInProgress = false;
 
     public enum PlayerPiece{
         NONE, PLAYER_1, PLAYER_2
@@ -28,25 +27,27 @@ public class Game {
         this.winConditionCount = winConditionCount;
     }
 
+    /**
+     * Initializes the game
+     */
     public void init(){
         int isGameOver = 0;
+        Controller activeController = c1;
         while(true) {
+            if (board.isFull()) break;
             isGameOver = isGameOver();
             if(isGameOver != 0) break;
-            controllerPlay(c1);
+            controllerPlay(activeController);
             //Utility.ConsoleFunctions.wait(500);
-
-            isGameOver = isGameOver();
-            if(isGameOver != 0) break;
-            controllerPlay(c2);
+            if(activeController == c1) activeController = c2;
+            else activeController = c1;
         }
+        Utility.ConsoleFunctions.cls();
         System.out.println(board);
 
-        if(isGameOver == 1){
-            System.out.println("PLAYER ONE WINS");
-        } else if (isGameOver == 2) {
-            System.out.println("PLAYER TWO WINS");
-        }
+        if (board.isFull()) System.out.println("NO WINNER");
+        else if(isGameOver == 1) System.out.println("PLAYER ONE WINS");
+        else if (isGameOver == 2) System.out.println("PLAYER TWO WINS");
         Utility.MessagePrompts.gameOver();
     }
 
@@ -54,8 +55,7 @@ public class Game {
         boolean isValidPlay = false;
         while(!isValidPlay){
             //Displaying board
-            Utility.ConsoleFunctions.cls();
-            System.out.println(board);
+            clearAndDisplayBoard();
 
             //Getting input
             try {
@@ -73,8 +73,7 @@ public class Game {
 
         }
         //Displaying board
-        Utility.ConsoleFunctions.cls();
-        System.out.println(board);
+        clearAndDisplayBoard();
     }
 
     /**
@@ -86,7 +85,7 @@ public class Game {
         //Logic for if the game is over
         //incomplete yet
 
-        Point[] winningPoints = new Point[4];
+        Point[] winningPoints = new Point[winConditionCount];
         int[] maxes = new int[2];
         int[] currents = new int[2];
         int last = -1;
@@ -102,10 +101,9 @@ public class Game {
                 maxes = detectMaxes(num, maxes, currents);
                 //Controller 1 wins
                 if(maxes[0] >= winConditionCount) {
-                    winningPoints[0] = new Point(i, j);
-                    winningPoints[1] = new Point(i, j-1);
-                    winningPoints[2] = new Point(i, j-2);
-                    winningPoints[3] = new Point(i, j-3);
+                    for (int k = 0; k < winConditionCount; k++) {
+                        winningPoints[k] = new Point(i, j - k);
+                    }
                     for (Point p : winningPoints) {
                         board.setTrueCoord(p.x, p.y, 3);
                     }
@@ -114,10 +112,9 @@ public class Game {
 
                 //Controller 2 wins
                 if(maxes[1] >= winConditionCount) {
-                    winningPoints[0] = new Point(i, j);
-                    winningPoints[1] = new Point(i, j-1);
-                    winningPoints[2] = new Point(i, j-2);
-                    winningPoints[3] = new Point(i, j-3);
+                    for (int k = 0; k < winConditionCount; k++) {
+                        winningPoints[k] = new Point(i, j - k);
+                    }
                     for (Point p : winningPoints) {
                         board.setTrueCoord(p.x, p.y, 4);
                     }
@@ -138,10 +135,9 @@ public class Game {
                 maxes = detectMaxes(num, maxes, currents);
                 //Controller 1 wins
                 if(maxes[0] >= winConditionCount) {
-                    winningPoints[0] = new Point(j, i);
-                    winningPoints[1] = new Point(j-1, i);
-                    winningPoints[2] = new Point(j-2, i);
-                    winningPoints[3] = new Point(j-3, i);
+                    for (int k = 0; k < winConditionCount; k++) {
+                        winningPoints[k] = new Point(j - k, i);
+                    }
                     for (Point p : winningPoints) {
                         board.setTrueCoord(p.x, p.y, 3);
                     }
@@ -150,10 +146,9 @@ public class Game {
 
                 //Controller 2 wins
                 if(maxes[1] >= winConditionCount) {
-                    winningPoints[0] = new Point(j, i);
-                    winningPoints[1] = new Point(j-1, i);
-                    winningPoints[2] = new Point(j-2, i);
-                    winningPoints[3] = new Point(j-3, i);
+                    for (int k = 0; k < winConditionCount; k++) {
+                        winningPoints[k] = new Point(j - k, i);
+                    }
                     for (Point p : winningPoints) {
                         board.setTrueCoord(p.x, p.y, 4);
                     }
@@ -199,5 +194,12 @@ public class Game {
             }
         }
         return maxes;
+    }
+
+    void clearAndDisplayBoard(){
+        if(showGUIInProgress){
+            Utility.ConsoleFunctions.cls();
+            System.out.println(board);
+        }
     }
 }

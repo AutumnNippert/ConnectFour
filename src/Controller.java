@@ -7,11 +7,25 @@
  */
 public abstract class Controller {
 
+    protected final int controllerNum;
+    protected int selection;
+
+    /**
+     * Constructs the controller.
+     *
+     * @param controllerNum controller number
+     */
+    public Controller(int controllerNum) {
+        this.controllerNum = controllerNum;
+    }
+
     /**
      * The controller plays a piece.
      * @param board the board that the controller is on
      */
-    public abstract void playPiece(Board board);
+    public void playPiece(Board board) {
+        board.play(selection, controllerNum);
+    }
 
     public abstract void selectPosition(Board board);
 }

@@ -1,6 +1,3 @@
-import java.util.ArrayList;
-import java.util.Scanner;
-
 /**
  * Menu Class.
  * Allows for easy menu creation output and input
