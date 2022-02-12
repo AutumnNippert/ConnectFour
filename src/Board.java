@@ -42,7 +42,7 @@ public class Board {
         ArrayList<Integer> positions = new ArrayList<>();
 
         //Checking the top most row for the existence of pieces
-        for (int i = 0; i < this.board[0].length - 1; i++) {
+        for (int i = 0; i < this.board[0].length; i++) {
             if (board[0][i] == 0) {
                 positions.add(i + 1);
             }

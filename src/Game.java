@@ -15,7 +15,7 @@ public class Game {
     private final Controller c2;
     private final int winConditionCount;
 
-    private boolean isDebug = false;
+    private boolean isDebug = true;
 
     public enum PlayerPiece{
         NONE, PLAYER_1, PLAYER_2
@@ -125,6 +125,7 @@ public class Game {
                 }
                 last = num;
             }
+            last = -1;
         }
 
         //check for consecutivity vertically
