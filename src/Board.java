@@ -55,6 +55,16 @@ public class Board {
     }
 
     /**
+     * Sets the real coords of a location
+     * @param x
+     * @param y
+     * @param playerNum
+     */
+    public void setTrueCoord(int x, int y, int playerNum) {
+        this.board[x][y] = playerNum;
+    }
+
+    /**
      * This is done! DON'T TOUCH IT ITS VERY FRAGILE AND UGLY.
      *
      * @param x         input coord
@@ -85,6 +95,10 @@ public class Board {
                     Utility.ConsoleFunctions.printColorWithBackground("[0]", Utility.Colors.BLACK, Utility.Colors.RED_BACKGROUND);
                 } else if(i == 2) { //YELLOW IS PLAYER 2
                     Utility.ConsoleFunctions.printColorWithBackground("[0]", Utility.Colors.BLACK, Utility.Colors.YELLOW_BACKGROUND);
+                } else if(i == 3) { //BLUE IS PLAYER 1 WINNING
+                    Utility.ConsoleFunctions.printColorWithBackground("[0]", Utility.Colors.BLACK, Utility.Colors.BLUE_BACKGROUND);
+                } else if(i == 4) { //GREEN IS PLAYER 2 WINNING
+                    Utility.ConsoleFunctions.printColorWithBackground("[0]", Utility.Colors.BLACK, Utility.Colors.GREEN_BACKGROUND);
                 }
             }
             System.out.println();

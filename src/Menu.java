@@ -7,7 +7,7 @@ import java.util.Scanner;
  * @author Chris Nippert
  * @version 1.0
  */
-public abstract class Menu <T> {
+public abstract class Menu {
 
     /**
      * Displays the menu and all its contents.

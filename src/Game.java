@@ -1,5 +1,6 @@
 import jdk.jshell.execution.Util;
 
+import java.awt.*;
 import java.util.Arrays;
 
 /**
@@ -28,16 +29,22 @@ public class Game {
     }
 
     public void init(){
+        int isGameOver = 0;
         while(true) {
-            if(isGameOver() != 0) break;
+            isGameOver = isGameOver();
+            if(isGameOver != 0) break;
             controllerPlay(c1);
-            Utility.ConsoleFunctions.wait(500);
-            if(isGameOver() != 0) break;
+            //Utility.ConsoleFunctions.wait(500);
+
+            isGameOver = isGameOver();
+            if(isGameOver != 0) break;
             controllerPlay(c2);
         }
-        if(isGameOver() == 1){
+        System.out.println(board);
+
+        if(isGameOver == 1){
             System.out.println("PLAYER ONE WINS");
-        } else if (isGameOver() == 2) {
+        } else if (isGameOver == 2) {
             System.out.println("PLAYER TWO WINS");
         }
         Utility.MessagePrompts.gameOver();
@@ -45,10 +52,11 @@ public class Game {
 
     private void controllerPlay(Controller c) {
         boolean isValidPlay = false;
-        //Displaying board
-        Utility.ConsoleFunctions.cls();
-        System.out.println(board);
         while(!isValidPlay){
+            //Displaying board
+            Utility.ConsoleFunctions.cls();
+            System.out.println(board);
+
             //Getting input
             try {
                 c.selectPosition(board);
@@ -62,11 +70,11 @@ public class Game {
             } catch (Exception e) {
                 Utility.MessagePrompts.invalidNumber();
             }
-            //Displaying board
-            Utility.ConsoleFunctions.cls();
-            System.out.println(board);
 
         }
+        //Displaying board
+        Utility.ConsoleFunctions.cls();
+        System.out.println(board);
     }
 
     /**
@@ -74,35 +82,46 @@ public class Game {
      * @return 0 if no player has one, 1 or 2 if controller 1 or controller 2 has won respectively
      */
     private int isGameOver(){
+        Utility.Debug.printDebug(isDebug, "Checking isGameOver()");
         //Logic for if the game is over
         //incomplete yet
-        int[] currents = new int[]{0, 0};
-        int[] maxes = new int[]{0, 0};
 
+        Point[] winningPoints = new Point[4];
+        int[] maxes = new int[2];
+        int[] currents = new int[2];
         int last = -1;
 
         //check for consecutivity horizontally
         //Definitely didn't steal this from the C code that we needed to make for 0p
+
+        Utility.Debug.printDebug(isDebug, "Checking Horizontal Win");
         for (int i = 0; i < board.getBoard().length; i++) {
             for (int j = 0; j < board.getBoard()[0].length; j++) {
-
                 int num = board.getBoard()[i][j];
-                Utility.Debug.printDebug(isDebug, "Current Number: " + num);
+                currents = detectCurrents(num, currents, last);
+                maxes = detectMaxes(num, maxes, currents);
+                //Controller 1 wins
+                if(maxes[0] >= winConditionCount) {
+                    winningPoints[0] = new Point(i, j);
+                    winningPoints[1] = new Point(i, j-1);
+                    winningPoints[2] = new Point(i, j-2);
+                    winningPoints[3] = new Point(i, j-3);
+                    for (Point p : winningPoints) {
+                        board.setTrueCoord(p.x, p.y, 3);
+                    }
+                    return 1;
+                }
 
-                if(num != 0) {
-                    Utility.Debug.printDebug(isDebug, "Last: " + last);
-                    Utility.Debug.printDebug(isDebug, "Is Consecutive: " + isConsecutive(num, last));
-                    if(isConsecutive(num, last)) {
-                        currents[num-1]++;
-                    } else {
-                        currents[num-1] = 1;
+                //Controller 2 wins
+                if(maxes[1] >= winConditionCount) {
+                    winningPoints[0] = new Point(i, j);
+                    winningPoints[1] = new Point(i, j-1);
+                    winningPoints[2] = new Point(i, j-2);
+                    winningPoints[3] = new Point(i, j-3);
+                    for (Point p : winningPoints) {
+                        board.setTrueCoord(p.x, p.y, 4);
                     }
-                    Utility.Debug.printDebug(isDebug, "\nCurrent =  " + currents[num-1]);
-                    Utility.Debug.printDebug(isDebug, "Max =  " + maxes[num-1]);
-                    Utility.Debug.printDebug(isDebug, "" + currents[num-1] + " > " + maxes[num-1] + ": " + (currents[num-1] > maxes[num-1]));
-                    if(currents[num-1] > maxes[num-1]){
-                        maxes[num-1] = currents[num-1];
-                    }
+                    return 2;
                 }
                 last = num;
             }
@@ -110,37 +129,39 @@ public class Game {
 
         //check for consecutivity vertically
         //Definitely didn't steal this from the C code that we needed to make for 0p
+        Utility.Debug.printDebug(isDebug, "Checking Vertical Win");
         for (int i = 0; i < board.getBoard()[0].length; i++) {
             for (int j = 0; j < board.getBoard().length; j++) {
-
                 int num = board.getBoard()[j][i];
-                Utility.Debug.printDebug(isDebug, "Current Number: " + num);
+                currents = detectCurrents(num, currents, last);
+                maxes = detectMaxes(num, maxes, currents);
+                //Controller 1 wins
+                if(maxes[0] >= winConditionCount) {
+                    winningPoints[0] = new Point(j, i);
+                    winningPoints[1] = new Point(j-1, i);
+                    winningPoints[2] = new Point(j-2, i);
+                    winningPoints[3] = new Point(j-3, i);
+                    for (Point p : winningPoints) {
+                        board.setTrueCoord(p.x, p.y, 3);
+                    }
+                    return 1;
+                }
 
-                if(num != 0) {
-                    Utility.Debug.printDebug(isDebug, "Last: " + last);
-                    Utility.Debug.printDebug(isDebug, "Is Consecutive: " + isConsecutive(num, last));
-                    if(isConsecutive(num, last)) {
-                        currents[num-1]++;
-                    } else {
-                        currents[num-1] = 1;
+                //Controller 2 wins
+                if(maxes[1] >= winConditionCount) {
+                    winningPoints[0] = new Point(j, i);
+                    winningPoints[1] = new Point(j-1, i);
+                    winningPoints[2] = new Point(j-2, i);
+                    winningPoints[3] = new Point(j-3, i);
+                    for (Point p : winningPoints) {
+                        board.setTrueCoord(p.x, p.y, 4);
                     }
-                    Utility.Debug.printDebug(isDebug, "\nCurrent =  " + currents[num-1]);
-                    Utility.Debug.printDebug(isDebug, "Max =  " + maxes[num-1]);
-                    Utility.Debug.printDebug(isDebug, "" + currents[num-1] + " > " + maxes[num-1] + ": " + (currents[num-1] > maxes[num-1]));
-                    if(currents[num-1] > maxes[num-1]){
-                        maxes[num-1] = currents[num-1];
-                    }
+                    return 2;
                 }
                 last = num;
             }
         }
         Utility.Debug.printDebug(isDebug, "Maxes: " + Arrays.toString(maxes));
-
-        //Controller 1 wins
-        if(maxes[0] >= winConditionCount) return 1;
-
-        //Controller 2 wins
-        if(maxes[1] >= winConditionCount) return 2;
 
         //If no winner yet
         return 0;
@@ -149,5 +170,33 @@ public class Game {
     //returns curr = last
     boolean isConsecutive(int curr, int last){
         return curr == last;
+    }
+
+    int[] detectCurrents(int num, int[] currents, int last){
+
+        if(num != 0) {
+            Utility.Debug.printDebug(isDebug, "Current Number: " + num);
+            Utility.Debug.printDebug(isDebug, "Last: " + last);
+            Utility.Debug.printDebug(isDebug, "Is Consecutive: " + isConsecutive(num, last));
+            if(isConsecutive(num, last)) {
+                currents[num-1]++;
+            } else {
+                currents[num-1] = 1;
+            }
+        }
+        return currents;
+    }
+
+    int[] detectMaxes(int num, int[] maxes, int[] currents){
+
+        if(num != 0) {
+            Utility.Debug.printDebug(isDebug, "\nCurrent =  " + currents[num-1]);
+            Utility.Debug.printDebug(isDebug, "Max =  " + maxes[num-1]);
+            Utility.Debug.printDebug(isDebug, "" + currents[num-1] + " > " + maxes[num-1] + ": " + (currents[num-1] > maxes[num-1]));
+            if(currents[num-1] > maxes[num-1]){
+                maxes[num-1] = currents[num-1];
+            }
+        }
+        return maxes;
     }
 }

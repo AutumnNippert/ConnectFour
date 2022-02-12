@@ -32,6 +32,7 @@ public class RandBot extends Controller {
         //Gets playable options
         ArrayList<Integer> options = board.getPlayableOptions();
         //Selects one of the playable options
-        selection = options.get(Utility.randInt(0, options.size()-1));
+        selection = options.get(Utility.randInt(0, options.size()));
+        Utility.Debug.printDebug(false, Integer.toString(selection));
     }
 }
