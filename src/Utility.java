@@ -35,6 +35,13 @@ public class Utility {
             scn.nextLine( );
         }
 
+        public static void invalidNumber( ) {
+            Scanner scn = new Scanner( System.in );
+            System.out.println( "Invalid number" );
+            System.out.print( "Press 'Enter' to continue..." );
+            scn.nextLine( );
+        }
+
         public static void gameOver( ) {
             System.out.println( """
                       _____                         ____                 
@@ -95,6 +102,16 @@ public class Utility {
          */
         public static void printColor(String s, String c){
             System.out.print(c + s + Colors.RESET);
+        }
+
+        /**
+         * Prints an input string with a specific color.
+         * @param s input string
+         * @param cFore input foreground color
+         * @param cBack input background color
+         */
+        public static void printColorWithBackground(String s, String cFore, String cBack){
+            System.out.print(cBack + cFore + s + Colors.RESET);
         }
     }
 

@@ -1,8 +1,14 @@
+import java.util.ArrayList;
+
 /**
  * Board Class.
  * Only deals with the board itself.
  * @author Chris Nippert
  * @version 0 (unreleased)
+ *
+ * TO COMPILE IN CMD to \out\compiledCode
+ * INSIDE THE \srd
+ * javac .\Main.java -d .\..\out\compiledCode
  */
 public class Board {
 
@@ -17,7 +23,7 @@ public class Board {
      * @param width width of board
      * @param height height of board
      */
-    public Board(int width, int height){
+    public Board(int width, int height) {
         this.width = width;
         this.height = height;
         board = new int[height][width];
@@ -27,25 +33,66 @@ public class Board {
         return this.board;
     }
 
+    /**
+     * Gets the options available in the board to place a piece.
+     *
+     * @return arrayList of the x values that the controller is able to place a piece in (STARTING AT 1)
+     */
+    public ArrayList<Integer> getPlayableOptions() {
+        ArrayList<Integer> positions = new ArrayList<>();
+
+        //Checking the top most row for the existence of pieces
+        for (int i = 0; i < this.board[0].length - 1; i++) {
+            if (board[0][i] == 0) {
+                positions.add(i + 1);
+            }
+        }
+        return positions;
+    }
+
     public void setCoord(int x, int y, int playerNum) {
-        this.board[this.height - y][x-1] = playerNum;
+        this.board[this.height - y - 1][x - 1] = playerNum;
+    }
+
+    /**
+     * This is done! DON'T TOUCH IT ITS VERY FRAGILE AND UGLY.
+     *
+     * @param x         input coord
+     * @param playerNum player num
+     */
+    public void play(int x, int playerNum) {
+        for (int i = 0; i < board.length; i++) {
+            //If it's at the bottom or its at another number.
+            //MY LORD THIS IS UGLY AF but my setCoord works upside down so I need to set the Y upside down as well.
+            if (board[i][x - 1] != 0) {
+                setCoord(x, board.length - i, playerNum);
+                break;
+            } else if (i == board.length - 1) {
+                setCoord(x, board.length - 1 - i, playerNum);
+                break;
+            }
+        }
     }
 
     @Override
     public String toString() {
         String board = "";
-        for (int[] arr : this.board ) {
-            for (int i : arr ) {
-                if(i == 0) { //WHITE IS NO PLAYER
-                    Utility.ConsoleFunctions.printColor("[ ]", Utility.Colors.WHITE_BACKGROUND);
-                } else if(i == 1) { //RED IS PLAYER 1
-                    Utility.ConsoleFunctions.printColor("[ ]", Utility.Colors.RED_BACKGROUND);
+        for (int[] arr : this.board) {
+            for (int i : arr) {
+                if (i == 0) { //WHITE IS NO PLAYER
+                    Utility.ConsoleFunctions.printColorWithBackground("[ ]", Utility.Colors.BLACK, Utility.Colors.WHITE_BACKGROUND);
+                } else if (i == 1) { //RED IS PLAYER 1
+                    Utility.ConsoleFunctions.printColorWithBackground("[0]", Utility.Colors.BLACK, Utility.Colors.RED_BACKGROUND);
                 } else if(i == 2) { //YELLOW IS PLAYER 2
-                    Utility.ConsoleFunctions.printColor("[ ]", Utility.Colors.YELLOW_BACKGROUND);
+                    Utility.ConsoleFunctions.printColorWithBackground("[0]", Utility.Colors.BLACK, Utility.Colors.YELLOW_BACKGROUND);
                 }
             }
             System.out.println();
         }
+        for (int i = 0; i < this.board[0].length; i++) {
+            System.out.printf("%2d ", i+1);
+        }
+        System.out.println();
         return board;
     }
 }

@@ -5,9 +5,10 @@ public class Main {
      * @param args command line arguments
      */
     public static void main(String[] args) {
-        Board b = new Board(20, 10);
-        b.setCoord(2, 1, 1);
-        b.setCoord(4, 6, 2);
-        System.out.println(b);
+        Board b = new Board(7, 6);
+        Player p1 = new Player(1);
+        Player p2 = new Player(2);
+        Game g = new Game(b, p1, p2);
+        g.init();
     }
 }
